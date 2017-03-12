@@ -71,7 +71,8 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 ####2. Final Model Architecture
 
 The final model architecture consisted of a convolution neural network with the following layers and layer sizes.
-Layer (type)                     Output Shape          Param #     Connected to                     
+
+`Layer (type)                     Output Shape          Param       Connected to                     
 ====================================================================================================
 cn1 (Convolution2D)              (None, 9, 39, 24)     672         convolution2d_input_3[0][0]      
 ____________________________________________________________________________________________________
@@ -126,6 +127,7 @@ ________________________________________________________________________________
 fc5 (Dense)                      (None, 1)             21          activation_24[0][0]              
 ====================================================================================================
 Total params: 6861
+`
 
 ####3. Creation of the Training Set & Training Process
 
