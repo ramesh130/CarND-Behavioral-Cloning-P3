@@ -11,7 +11,7 @@ Thee project has five files:
 * drive.py (script to drive the car - feel free to modify this file)
 * model.h5 (a trained Keras model)
 * a report writeup file (either markdown or pdf)
-* video.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
+* run1.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
 
 The Project
 ---
