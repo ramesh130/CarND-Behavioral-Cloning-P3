@@ -11,7 +11,7 @@ Thee project has five files:
 * drive.py (script to drive the car - feel free to modify this file)
 * model.h5 (a trained Keras model)
 * a report writeup file (either markdown or pdf)
-* video.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
+* run1.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
 
 The Project
 ---
@@ -25,3 +25,6 @@ The goals / steps of this project are the following:
 This lab requires:
 
 * [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
+
+The project write up is [here](https://github.com/ramesh130/CarND-Behavioral-Cloning-P3/blob/master/writeup_report.md)
+The project video is [here](https://github.com/ramesh130/CarND-Behavioral-Cloning-P3/blob/master/run1.mp4)
