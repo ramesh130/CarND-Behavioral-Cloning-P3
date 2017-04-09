@@ -11,6 +11,14 @@ The goals / steps of this project are the following:
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
+[//]: # (Image References)
+
+[image2]: ./examples/center_2016_12_01_13_33_10_173.jpg "Centre camera"
+[image3]: ./examples/left_2016_12_01_13_40_11_077.jpg "Left camera"
+[image4]: ./examples/right_2016_12_01_13_31_13_686.jpg "Right camera"
+[image5]: ./examples/center_2017_03_14_20_42_55_719.jpg "Offroad Centre camera"
+[image6]: ./examples/left_2017_03_14_20_42_55_719.jpg "Offroad Left camera"
+[image7]: ./examples/right_2017_03_14_20_42_55_824.jpg "Offroad Right camera"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -132,6 +140,20 @@ Total params: 6861
 ####3. Creation of the Training Set & Training Process
 
 I used the data set provided by Udacity as I found it diffult to get good data set buy running the simulator myself.
+Here is an example image of center lane driving:
+
+![alt text][image2]
+
+I also used images of vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover in case it goes off the road. Below are the examples of the same.
+
+![alt text][image3]
+![alt text][image4]
+
+Below are images for data when the car veers offroad-
+
+![alt text][image5]
+![alt text][image6]
+![alt text][image7]
 
 I used `train_test_split()` method to divide the data set into tarining and test set.
 
