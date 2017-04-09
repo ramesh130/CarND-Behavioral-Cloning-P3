@@ -16,12 +16,15 @@ The goals / steps of this project are the following:
 [image2]: ./examples/center_2016_12_01_13_33_10_173.jpg "Centre camera"
 [image3]: ./examples/left_2016_12_01_13_40_11_077.jpg "Left camera"
 [image4]: ./examples/right_2016_12_01_13_31_13_686.jpg "Right camera"
+[image22]: ./examples/center_2017_03_14_20_42_53_900.jpg "Centre camera"
+[image33]: ./examples/left_2017_03_14_20_42_53_900.jpg "Left camera"
+[image44]: ./examples/right_2017_03_14_20_42_53_900.jpg "Right camera"
 [image5]: ./examples/center_2017_03_14_20_42_55_719.jpg "Offroad Centre camera"
 [image6]: ./examples/left_2017_03_14_20_42_55_719.jpg "Offroad Left camera"
 [image7]: ./examples/right_2017_03_14_20_42_55_824.jpg "Offroad Right camera"
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Files Submitted & Code Quality
@@ -42,12 +45,12 @@ python drive.py model.h5
 
 #### 3. Submission code is usable and readable
 
-The BehavorCloning.ipynb file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The BehavorCloning.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ### Model Architecture and Training Strategy
 
 #### 1. An appropriate model architecture has been employed
-
+Line 167 - 305
 The simple neural network with 3 convolution layers and 2 fully connected layers is used. The first layer is a convolution layer of kernel size 1x1 and a depth of 3 and the goal of this layer is so the model can figure out the best color space. Following this the model uses 3 convolution layers each followed by RELU activation and a maxpool layer of size (2x2). The first convolution layer has a kernel size of 3x3, stride of 2x2 and a depth of 32. The second convolution layer has a kernel size of 3x3, stride of 2x2 and a depth of 64. The third convolution layer has a kernel size of 3x3, stride of 1x1 and a depth of 128.
 After this the output is flattened. Dropout of 50% is applied and then there are 2 dense layers of 128 neurons. The final layer is an output layer of 1 neuron. All the layers are followed by RELU activation to introduce non-linearity.
 
@@ -58,8 +61,14 @@ The model contains dropout layers in order to reduce overfitting. A dropout laye
 The model was trained and validated on different data sets to ensure that the model was not overfitting. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
+Line 305 - 309
+Within the neural network the following parameters were tuned:
+1. Neural network structure — Number of convolution, max pool and dense layers
+2. Learning rate in the optimizer
+3. No. Of epoches — I found a value b/w 5–8 worked best. All the intermediate models were saved using Keras checkpoint (model.py lines 329–333) and tested in the simulator
+4. Training samples per epoch — I found 20k to be the optimal number
 
-The model used an adam optimizer, so the learning rate was not tuned manually.
+I found that validation loss was not a very good indicator of the quality of the model and the true test was performance in the simulator. However models with very high validation loss performed poorly. But within different epochs, models with higher validation loss could have better performance.
 
 #### 4. Appropriate training data
 
@@ -132,17 +141,17 @@ Non-trainable params: 0
 
 #### 3. Creation of the Training Set & Training Process
 
-I used the data set provided by Udacity as I found it diffult to get good data set buy running the simulator myself.
+I used the data set provided by Udacity as well as data I generated to augment the data set.
 Here is an example image of center lane driving:
 
 ![alt text][image2]
-
-I also used images of vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover in case it goes off the road. Below are the examples of the same.
-
 ![alt text][image3]
 ![alt text][image4]
+![alt text][image22]
+![alt text][image33]
+![alt text][image44]
 
-Below are images for data when the car veers offroad-
+I also used images of vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover in case it goes off the road. Below are images for data when the car veers offroad-
 
 ![alt text][image5]
 ![alt text][image6]
