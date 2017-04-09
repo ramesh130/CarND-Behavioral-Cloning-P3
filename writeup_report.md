@@ -1,6 +1,6 @@
-#**Behavioral Cloning** 
+# **Behavioral Cloning** 
 
-##Writeup
+## Writeup
 ---
 
 **Behavioral Cloning Project**
@@ -24,120 +24,113 @@ The goals / steps of this project are the following:
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Files Submitted & Code Quality
+### Files Submitted & Code Quality
 
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* BehavorCloning.ipynb containing the script to create and train the model
+* BehavorCloning.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 
-####2. Submission includes functional code
+#### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
 python drive.py model.h5
 ```
 
-####3. Submission code is usable and readable
+#### 3. Submission code is usable and readable
 
 The BehavorCloning.ipynb file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. An appropriate model architecture has been employed
+#### 1. An appropriate model architecture has been employed
 
-The model architecture is based on the [Nvidia paper](https://arxiv.org/pdf/1604.07316.pdf) on end-to-end learning. In this paper, a CNN is implemented with 5 convolutional layers, followed by 1 flattened layers, and then by 3 fully connected layers. At the end of the network is a single neuron which generates the steering angle. My CNN follows the similar architecture, except it contains 4 convolutional layers and 4 fully connected layers.
+The simple neural network with 3 convolution layers and 2 fully connected layers is used. The first layer is a convolution layer of kernel size 1x1 and a depth of 3 and the goal of this layer is so the model can figure out the best color space. Following this the model uses 3 convolution layers each followed by RELU activation and a maxpool layer of size (2x2). The first convolution layer has a kernel size of 3x3, stride of 2x2 and a depth of 32. The second convolution layer has a kernel size of 3x3, stride of 2x2 and a depth of 64. The third convolution layer has a kernel size of 3x3, stride of 1x1 and a depth of 128.
+After this the output is flattened. Dropout of 50% is applied and then there are 2 dense layers of 128 neurons. The final layer is an output layer of 1 neuron. All the layers are followed by RELU activation to introduce non-linearity.
 
-####2. Attempts to reduce overfitting in the model
+#### 2. Attempts to reduce overfitting in the model
 
 The model contains dropout layers in order to reduce overfitting. A dropout layer is added after every convolution and fully connected layer. The layer eliminates a percentage of the output value to help the algorithm learn a more robust model.
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
-####3. Model parameter tuning
+#### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually.
 
-####4. Appropriate training data
+#### 4. Appropriate training data
 
 Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road.
 
 For details about how I created the training data, see the next section. 
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. Solution Design Approach
+#### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to use one of the known well performing model like LeNet, GoogLenet etc. Then I came across the model presented by Nvidia and decide to use it as they have already spent lot of time analyzing the architecture and came up with a well performing model.
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track. To fix this, I must enrich my dataset. Due to time limitation, I was not able to do so.
+The overall strategy for deriving a model architecture was to use one of the known well performing model like LeNet, GoogLenet etc. However I went ahead and used a simpler model to reduce the training time. The model may not be the best but works reasonably well.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road for some distance.
 
-####2. Final Model Architecture
+#### 2. Final Model Architecture
 
 The final model architecture consisted of a convolution neural network with the following layers and layer sizes.
+
 ```
-Layer (type)                     Output Shape          Param       Connected to                     
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to                     
 ====================================================================================================
-cn1 (Convolution2D)              (None, 9, 39, 24)     672         convolution2d_input_3[0][0]      
+zeropadding2d_1 (ZeroPadding2D)  (None, 162, 322, 3)   0           zeropadding2d_input_1[0][0]      
 ____________________________________________________________________________________________________
-dropout_17 (Dropout)             (None, 9, 39, 24)     0           cn1[0][0]                        
+cropping2d_1 (Cropping2D)        (None, 82, 322, 3)    0           zeropadding2d_1[0][0]            
 ____________________________________________________________________________________________________
-activation_17 (Activation)       (None, 9, 39, 24)     0           dropout_17[0][0]                 
+lambda_1 (Lambda)                (None, 64, 64, 3)     0           cropping2d_1[0][0]               
 ____________________________________________________________________________________________________
-cn2 (Convolution2D)              (None, 4, 19, 12)     2604        activation_17[0][0]              
+lambda_2 (Lambda)                (None, 64, 64, 3)     0           lambda_1[0][0]                   
 ____________________________________________________________________________________________________
-dropout_18 (Dropout)             (None, 4, 19, 12)     0           cn2[0][0]                        
+color_conv (Convolution2D)       (None, 64, 64, 3)     12          lambda_2[0][0]                   
 ____________________________________________________________________________________________________
-activation_18 (Activation)       (None, 4, 19, 12)     0           dropout_18[0][0]                 
+conv1 (Convolution2D)            (None, 32, 32, 32)    896         color_conv[0][0]                 
 ____________________________________________________________________________________________________
-cn3 (Convolution2D)              (None, 2, 17, 8)      872         activation_18[0][0]              
+activation_1 (Activation)        (None, 32, 32, 32)    0           conv1[0][0]                      
 ____________________________________________________________________________________________________
-dropout_19 (Dropout)             (None, 2, 17, 8)      0           cn3[0][0]                        
+pool1 (MaxPooling2D)             (None, 31, 31, 32)    0           activation_1[0][0]               
 ____________________________________________________________________________________________________
-activation_19 (Activation)       (None, 2, 17, 8)      0           dropout_19[0][0]                 
+conv2 (Convolution2D)            (None, 16, 16, 64)    18496       pool1[0][0]                      
 ____________________________________________________________________________________________________
-cn4 (Convolution2D)              (None, 1, 16, 4)      132         activation_19[0][0]              
+relu2 (Activation)               (None, 16, 16, 64)    0           conv2[0][0]                      
 ____________________________________________________________________________________________________
-dropout_20 (Dropout)             (None, 1, 16, 4)      0           cn4[0][0]                        
+pool2 (MaxPooling2D)             (None, 8, 8, 64)      0           relu2[0][0]                      
 ____________________________________________________________________________________________________
-activation_20 (Activation)       (None, 1, 16, 4)      0           dropout_20[0][0]                 
+conv3 (Convolution2D)            (None, 8, 8, 128)     73856       pool2[0][0]                      
 ____________________________________________________________________________________________________
-flatten (Flatten)                (None, 64)            0           activation_20[0][0]              
+activation_2 (Activation)        (None, 8, 8, 128)     0           conv3[0][0]                      
 ____________________________________________________________________________________________________
-fc1 (Dense)                      (None, 20)            1300        flatten[0][0]                    
+pool3 (MaxPooling2D)             (None, 4, 4, 128)     0           activation_2[0][0]               
 ____________________________________________________________________________________________________
-dropout_21 (Dropout)             (None, 20)            0           fc1[0][0]                        
+flatten_1 (Flatten)              (None, 2048)          0           pool3[0][0]                      
 ____________________________________________________________________________________________________
-activation_21 (Activation)       (None, 20)            0           dropout_21[0][0]                 
+dropout_1 (Dropout)              (None, 2048)          0           flatten_1[0][0]                  
 ____________________________________________________________________________________________________
-fc2 (Dense)                      (None, 20)            420         activation_21[0][0]              
+dense1 (Dense)                   (None, 128)           262272      dropout_1[0][0]                  
 ____________________________________________________________________________________________________
-dropout_22 (Dropout)             (None, 20)            0           fc2[0][0]                        
+activation_3 (Activation)        (None, 128)           0           dense1[0][0]                     
 ____________________________________________________________________________________________________
-activation_22 (Activation)       (None, 20)            0           dropout_22[0][0]                 
+dropout_2 (Dropout)              (None, 128)           0           activation_3[0][0]               
 ____________________________________________________________________________________________________
-fc3 (Dense)                      (None, 20)            420         activation_22[0][0]              
+dense2 (Dense)                   (None, 128)           16512       dropout_2[0][0]                  
 ____________________________________________________________________________________________________
-dropout_23 (Dropout)             (None, 20)            0           fc3[0][0]                        
-____________________________________________________________________________________________________
-activation_23 (Activation)       (None, 20)            0           dropout_23[0][0]                 
-____________________________________________________________________________________________________
-fc4 (Dense)                      (None, 20)            420         activation_23[0][0]              
-____________________________________________________________________________________________________
-dropout_24 (Dropout)             (None, 20)            0           fc4[0][0]                        
-____________________________________________________________________________________________________
-activation_24 (Activation)       (None, 20)            0           dropout_24[0][0]                 
-____________________________________________________________________________________________________
-fc5 (Dense)                      (None, 1)             21          activation_24[0][0]              
+output (Dense)                   (None, 1)             129         dense2[0][0]                     
 ====================================================================================================
-Total params: 6861
+Total params: 372,173
+Trainable params: 372,173
+Non-trainable params: 0
 ```
 
-####3. Creation of the Training Set & Training Process
+#### 3. Creation of the Training Set & Training Process
 
 I used the data set provided by Udacity as I found it diffult to get good data set buy running the simulator myself.
 Here is an example image of center lane driving:
